@@ -1,0 +1,23 @@
+# Reachable on the demo box as http://tester:3000 from the Nginx gateway.
+services:
+  tester:
+    build: .
+    container_name: gw-tester
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      DATABASE_PATH: /var/lib/gw-tester/tester.db
+    volumes:
+      - tester-data:/var/lib/gw-tester
+    networks:
+      - genwealth
+
+networks:
+  genwealth:
+    external: true
+
+volumes:
+  tester-data:
