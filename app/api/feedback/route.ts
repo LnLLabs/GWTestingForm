@@ -15,6 +15,6 @@ export async function POST(request: Request) {
   const input = parseFeedbackInput(await readJson(request));
   if (!input) return jsonError("Choose a rating from 1 to 5.", 400);
 
-  addFeedback(access.stakeAddress, input.stars, input.comment);
+  addFeedback(access.stakeAddress, input);
   return NextResponse.json({ ok: true });
 }

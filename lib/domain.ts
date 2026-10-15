@@ -60,9 +60,14 @@ export function parseBugInput(body: unknown): BugInput | null {
   return { title, steps, expected, actual, suggestedSeverity: suggested };
 }
 
-export function parseFeedbackInput(
-  body: unknown,
-): { stars: number; comment: string } | null {
+export type FeedbackInput = {
+  stars: number;
+  comment: string;
+  changes: string;
+  mainnetUse: string;
+};
+
+export function parseFeedbackInput(body: unknown): FeedbackInput | null {
   if (!body || typeof body !== "object") return null;
   const record = body as Record<string, unknown>;
   const stars = record.stars;
@@ -70,9 +75,13 @@ export function parseFeedbackInput(
     return null;
   }
   if (record.comment !== undefined && typeof record.comment !== "string") return null;
+  if (record.changes !== undefined && typeof record.changes !== "string") return null;
+  if (record.mainnetUse !== undefined && typeof record.mainnetUse !== "string") return null;
   const comment = clean(record.comment ?? "", LIMITS.comment);
-  if (comment === null) return null;
-  return { stars, comment };
+  const changes = clean(record.changes ?? "", LIMITS.comment);
+  const mainnetUse = clean(record.mainnetUse ?? "", LIMITS.comment);
+  if (comment === null || changes === null || mainnetUse === null) return null;
+  return { stars, comment, changes, mainnetUse };
 }
 
 export function parseReviewInput(

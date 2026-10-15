@@ -46,6 +46,8 @@ export default async function AccountPage() {
           locked={locked}
           initialStars={feedback?.stars ?? null}
           initialComment={feedback?.comment ?? ""}
+          initialChanges={feedback?.changes ?? ""}
+          initialMainnetUse={feedback?.mainnetUse ?? ""}
         />
       </main>
     </>

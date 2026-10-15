@@ -61,13 +61,18 @@ export function latestFeedback(stakeAddress: string) {
   );
 }
 
-export function addFeedback(stakeAddress: string, stars: number, comment: string) {
+export function addFeedback(
+  stakeAddress: string,
+  input: { stars: number; comment: string; changes: string; mainnetUse: string },
+) {
   getDb()
     .insert(feedback)
     .values({
       stakeAddress,
-      stars,
-      comment,
+      stars: input.stars,
+      comment: input.comment,
+      changes: input.changes,
+      mainnetUse: input.mainnetUse,
       createdAt: Date.now(),
     })
     .run();

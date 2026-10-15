@@ -17,6 +17,8 @@ export default async function AdminPage() {
     mainnetAddress: row.participant.mainnetAddress,
     stars: row.latest?.stars ?? null,
     comment: row.latest?.comment ?? "",
+    changes: row.latest?.changes ?? "",
+    mainnetUse: row.latest?.mainnetUse ?? "",
     bugCount: row.bugCount,
     createdAt: row.participant.createdAt,
   }));

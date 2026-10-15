@@ -24,6 +24,8 @@ export const feedback = sqliteTable("feedback", {
     .references(() => participants.stakeAddress),
   stars: integer("stars").notNull(),
   comment: text("comment").notNull().default(""),
+  changes: text("changes").notNull().default(""),
+  mainnetUse: text("mainnet_use").notNull().default(""),
   createdAt: integer("created_at").notNull(),
 });
 

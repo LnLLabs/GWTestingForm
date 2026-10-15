@@ -19,6 +19,8 @@ export type ReviewParticipant = {
   mainnetAddress: string | null;
   stars: number | null;
   comment: string;
+  changes: string;
+  mainnetUse: string;
   bugCount: number;
   createdAt: number;
 };
@@ -65,6 +67,18 @@ export function AdminReview({
                 </p>
                 {participant.comment ? (
                   <p className="mt-2 whitespace-pre-wrap leading-6">{participant.comment}</p>
+                ) : null}
+                {participant.changes ? (
+                  <p className="mt-2 whitespace-pre-wrap leading-6">
+                    <span className="text-muted">Would change or add: </span>
+                    {participant.changes}
+                  </p>
+                ) : null}
+                {participant.mainnetUse ? (
+                  <p className="mt-2 whitespace-pre-wrap leading-6">
+                    <span className="text-muted">Would use on mainnet: </span>
+                    {participant.mainnetUse}
+                  </p>
                 ) : null}
               </li>
             ))}
