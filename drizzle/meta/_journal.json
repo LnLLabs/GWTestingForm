@@ -15,6 +15,13 @@
       "when": 1760540000000,
       "tag": "0001_feedback_questions",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1760870000000,
+      "tag": "0002_participant_contact",
+      "breakpoints": true
     }
   ]
 }

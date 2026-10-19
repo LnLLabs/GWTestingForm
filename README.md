@@ -32,6 +32,8 @@ Set these in `.env` before starting:
 - `SESSION_SECRET` — at least 32 random characters. Do not reuse the sample value.
 - `APP_URL` — `https://tester.genwealth.app`
 - `ADMIN_STAKE_ADDRESSES` — reviewer `stake_test1...` addresses
+- `PRIVACY_CONTROLLER_NAME` — the founder (a natural person) named as data controller until GenWealth is a legal entity
+- `PRIVACY_CONTACT_EMAIL` — where testers ask for access, deletion, or to withdraw email consent
 
 `DATABASE_PATH` in `.env` is ignored in Docker. Compose stores the database in the `tester-data` volume.
 
@@ -57,6 +59,12 @@ Wallets can sign on `http://localhost:3000` during development. They need HTTPS 
 3. Enter an `addr1...` reward address, review the message, and sign it.
 4. Save a star rating and file a bug.
 5. Sign in with an allowlisted wallet and set the bug's status and severity.
+
+## Email and privacy
+
+Testers can leave an email on the feedback form. It is optional. Two separate consents are stored on `participants`: contact about testing and rewards, and product updates. The privacy notice is `/privacy`.
+
+Have counsel review that notice before production. After incorporation, update it so the new company is the controller, and record that this personal data moved to that entity.
 
 ## Later payout check
 

@@ -17,6 +17,9 @@ import { shortAddress } from "@/lib/addresses";
 export type ReviewParticipant = {
   stakeAddress: string;
   mainnetAddress: string | null;
+  email: string | null;
+  consentTestContact: boolean;
+  consentProductUpdates: boolean;
   stars: number | null;
   comment: string;
   changes: string;
@@ -61,6 +64,21 @@ export function AdminReview({
                 <p className="mt-2 break-all">
                   {participant.mainnetAddress ?? "No reward address yet"}
                 </p>
+                {participant.email ? (
+                  <>
+                    <p className="mt-2 break-all">{participant.email}</p>
+                    <p className="mt-1 text-muted">
+                      {[
+                        participant.consentTestContact ? "Test contact" : null,
+                        participant.consentProductUpdates ? "Product updates" : null,
+                      ]
+                        .filter(Boolean)
+                        .join(" · ") || "No email consent on file"}
+                    </p>
+                  </>
+                ) : (
+                  <p className="mt-2 text-muted">No email</p>
+                )}
                 <p className="mt-2 text-muted">
                   {participant.stars ? `${participant.stars} stars` : "No rating"} ·{" "}
                   {participant.bugCount} bug{participant.bugCount === 1 ? "" : "s"}

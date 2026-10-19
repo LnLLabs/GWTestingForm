@@ -13,6 +13,14 @@ export const participants = sqliteTable("participants", {
   rewardMessage: text("reward_message"),
   rewardSignature: text("reward_signature"),
   rewardKey: text("reward_key"),
+  email: text("email"),
+  consentTestContact: integer("consent_test_contact", { mode: "boolean" }).notNull().default(false),
+  consentProductUpdates: integer("consent_product_updates", { mode: "boolean" })
+    .notNull()
+    .default(false),
+  consentVersion: text("consent_version"),
+  consentAt: integer("consent_at"),
+  emailUpdatedAt: integer("email_updated_at"),
   createdAt: integer("created_at").notNull(),
   updatedAt: integer("updated_at").notNull(),
 });

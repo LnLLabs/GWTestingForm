@@ -48,6 +48,9 @@ export default async function AccountPage() {
           initialComment={feedback?.comment ?? ""}
           initialChanges={feedback?.changes ?? ""}
           initialMainnetUse={feedback?.mainnetUse ?? ""}
+          initialEmail={participant?.email ?? ""}
+          initialConsentTestContact={participant?.consentTestContact ?? false}
+          initialConsentProductUpdates={participant?.consentProductUpdates ?? false}
         />
       </main>
     </>

@@ -6,6 +6,8 @@ export type AppEnv = {
   appUrl: string;
   adminStakeAddresses: string[];
   secureCookies: boolean;
+  privacyControllerName: string;
+  privacyContactEmail: string;
 };
 
 const DEV_SESSION_SECRET = "dev-only-session-secret-change-before-production";
@@ -28,6 +30,14 @@ export function getEnv(): AppEnv {
     throw new Error("SESSION_SECRET must be at least 32 characters.");
   }
 
+  const privacyControllerName = process.env.PRIVACY_CONTROLLER_NAME?.trim() ?? "";
+  const privacyContactEmail = process.env.PRIVACY_CONTACT_EMAIL?.trim() ?? "";
+  if (isProd && (!privacyControllerName || !privacyContactEmail)) {
+    throw new Error(
+      "PRIVACY_CONTROLLER_NAME and PRIVACY_CONTACT_EMAIL are required in production.",
+    );
+  }
+
   const appUrl = process.env.APP_URL?.trim() || "http://localhost:3000";
   const adminStakeAddresses = (process.env.ADMIN_STAKE_ADDRESSES ?? "")
     .split(",")
@@ -40,6 +50,8 @@ export function getEnv(): AppEnv {
     appUrl,
     adminStakeAddresses,
     secureCookies: appUrl.startsWith("https:"),
+    privacyControllerName,
+    privacyContactEmail,
   };
 }
 

@@ -60,28 +60,100 @@ export function parseBugInput(body: unknown): BugInput | null {
   return { title, steps, expected, actual, suggestedSeverity: suggested };
 }
 
+const EMAIL_MAX = 254;
+
 export type FeedbackInput = {
   stars: number;
   comment: string;
   changes: string;
   mainnetUse: string;
+  email: string;
+  consentTestContact: boolean;
+  consentProductUpdates: boolean;
 };
 
-export function parseFeedbackInput(body: unknown): FeedbackInput | null {
-  if (!body || typeof body !== "object") return null;
+export type FeedbackParseResult =
+  | { ok: true; value: FeedbackInput }
+  | { ok: false; error: string };
+
+export function isEmailAddress(value: string): boolean {
+  if (value.length === 0 || value.length > EMAIL_MAX) return false;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+export function feedbackContactError(input: {
+  email: string;
+  consentTestContact: boolean;
+  consentProductUpdates: boolean;
+}): string | null {
+  const email = input.email.trim().toLowerCase();
+  const wantsEmail = input.consentTestContact || input.consentProductUpdates;
+  if (!email && !wantsEmail) return null;
+  if (email && !isEmailAddress(email)) return "Enter a valid email address.";
+  if (email && !wantsEmail) return "Choose at least one reason we may email you.";
+  if (!email && wantsEmail) return "Enter an email address for the contact option you selected.";
+  return null;
+}
+
+export function parseFeedbackInput(body: unknown): FeedbackParseResult {
+  if (!body || typeof body !== "object") {
+    return { ok: false, error: "Choose a rating from 1 to 5." };
+  }
   const record = body as Record<string, unknown>;
   const stars = record.stars;
   if (typeof stars !== "number" || !Number.isInteger(stars) || stars < 1 || stars > 5) {
-    return null;
+    return { ok: false, error: "Choose a rating from 1 to 5." };
   }
-  if (record.comment !== undefined && typeof record.comment !== "string") return null;
-  if (record.changes !== undefined && typeof record.changes !== "string") return null;
-  if (record.mainnetUse !== undefined && typeof record.mainnetUse !== "string") return null;
+  if (record.comment !== undefined && typeof record.comment !== "string") {
+    return { ok: false, error: "Choose a rating from 1 to 5." };
+  }
+  if (record.changes !== undefined && typeof record.changes !== "string") {
+    return { ok: false, error: "Choose a rating from 1 to 5." };
+  }
+  if (record.mainnetUse !== undefined && typeof record.mainnetUse !== "string") {
+    return { ok: false, error: "Choose a rating from 1 to 5." };
+  }
   const comment = clean(record.comment ?? "", LIMITS.comment);
   const changes = clean(record.changes ?? "", LIMITS.comment);
   const mainnetUse = clean(record.mainnetUse ?? "", LIMITS.comment);
-  if (comment === null || changes === null || mainnetUse === null) return null;
-  return { stars, comment, changes, mainnetUse };
+  if (comment === null || changes === null || mainnetUse === null) {
+    return { ok: false, error: "Choose a rating from 1 to 5." };
+  }
+
+  if (record.email !== undefined && typeof record.email !== "string") {
+    return { ok: false, error: "Enter a valid email address." };
+  }
+  const consentTestContact = readConsent(record.consentTestContact);
+  const consentProductUpdates = readConsent(record.consentProductUpdates);
+  if (consentTestContact === null || consentProductUpdates === null) {
+    return { ok: false, error: "Choose how we may use your email." };
+  }
+  const email = typeof record.email === "string" ? record.email.trim().toLowerCase() : "";
+  const contactError = feedbackContactError({
+    email,
+    consentTestContact,
+    consentProductUpdates,
+  });
+  if (contactError) return { ok: false, error: contactError };
+
+  return {
+    ok: true,
+    value: {
+      stars,
+      comment,
+      changes,
+      mainnetUse,
+      email,
+      consentTestContact,
+      consentProductUpdates,
+    },
+  };
+}
+
+function readConsent(value: unknown): boolean | null {
+  if (value === undefined) return false;
+  if (typeof value === "boolean") return value;
+  return null;
 }
 
 export function parseReviewInput(

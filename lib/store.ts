@@ -61,6 +61,31 @@ export function latestFeedback(stakeAddress: string) {
   );
 }
 
+export function updateParticipantContact(
+  stakeAddress: string,
+  input: {
+    email: string;
+    consentTestContact: boolean;
+    consentProductUpdates: boolean;
+    consentVersion: string;
+  },
+) {
+  const now = Date.now();
+  getDb()
+    .update(participants)
+    .set({
+      email: input.email,
+      consentTestContact: input.consentTestContact,
+      consentProductUpdates: input.consentProductUpdates,
+      consentVersion: input.consentVersion,
+      consentAt: now,
+      emailUpdatedAt: now,
+      updatedAt: now,
+    })
+    .where(eq(participants.stakeAddress, stakeAddress))
+    .run();
+}
+
 export function addFeedback(
   stakeAddress: string,
   input: { stars: number; comment: string; changes: string; mainnetUse: string },

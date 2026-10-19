@@ -15,6 +15,9 @@ export default async function AdminPage() {
   const participants: ReviewParticipant[] = listParticipantsForReview().map((row) => ({
     stakeAddress: row.participant.stakeAddress,
     mainnetAddress: row.participant.mainnetAddress,
+    email: row.participant.email,
+    consentTestContact: row.participant.consentTestContact,
+    consentProductUpdates: row.participant.consentProductUpdates,
     stars: row.latest?.stars ?? null,
     comment: row.latest?.comment ?? "",
     changes: row.latest?.changes ?? "",

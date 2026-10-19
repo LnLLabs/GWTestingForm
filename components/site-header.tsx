@@ -19,14 +19,17 @@ export function SiteHeader({
           <Image src="/genwealth-logo.png" alt="" width={36} height={36} priority />
           <span className="text-lg font-semibold tracking-tight">GenWealth</span>
         </Link>
-        {stakeAddress ? (
-          <div className="flex items-center gap-4 text-sm">
+        <div className="flex items-center gap-4 text-sm">
+          <Link href="/privacy" className="text-muted hover:text-ink">
+            Privacy
+          </Link>
+          {stakeAddress ? (
             <span className="hidden font-mono text-xs text-muted sm:inline" title={stakeAddress}>
               {stakeAddress.slice(0, 14)}…{stakeAddress.slice(-4)}
             </span>
-            {signOut}
-          </div>
-        ) : null}
+          ) : null}
+          {signOut}
+        </div>
       </div>
       {stakeAddress ? <AppTabs isReviewer={isReviewer} /> : null}
     </header>
