@@ -26,7 +26,9 @@ COPY --from=build /app/public ./public
 COPY --from=build /app/drizzle ./drizzle
 COPY --from=build /app/next.config.ts ./next.config.ts
 COPY docker/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+RUN chmod +x /entrypoint.sh \
+  && mkdir -p /app/.next/cache/images \
+  && chown -R node:node /app/.next
 
 EXPOSE 3000
 ENTRYPOINT ["/entrypoint.sh"]
